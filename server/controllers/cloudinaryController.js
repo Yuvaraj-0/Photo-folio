@@ -23,6 +23,24 @@ function uploadToCloudinary(fileBuffer, folder) {
     streamifier.createReadStream(fileBuffer).pipe(stream);
   });
 }
+export const getSignedUrl = (req, res) => {
+  const { public_id } = req.body;
+
+  if (!public_id) return res.status(400).json({ message: 'public_id is required' });
+
+  try {
+    const signedUrl = cloudinary.utils.private_download_url(public_id, {
+      resource_type: 'raw', // for PDFs
+      type: 'private',
+      expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hour
+    });
+
+    res.json({ signedUrl });
+  } catch (err) {
+    console.error('Signed URL error:', err);
+    res.status(500).json({ message: 'Could not generate signed URL' });
+  }
+};
 
 // DEBUGGING INSTRUCTIONS:
 // 1. Test this endpoint with Postman/cURL using a small image, album, and valid token.

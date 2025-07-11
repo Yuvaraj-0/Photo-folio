@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { removeImage, selectImage } from '../redux/gallerySlice';
+import {  selectImage } from '../redux/gallerySlice';
 
 export default function GalleryGrid({ images }) {
   const dispatch = useDispatch();

@@ -27,18 +27,22 @@ const statsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchStats.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchStats.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload;
-      })
-      .addCase(fetchStats.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || 'Failed to fetch stats';
-      });
+    .addCase(fetchStats.pending, state => {
+      console.log('fetchStats pending');
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(fetchStats.fulfilled, (state, action) => {
+      console.log('fetchStats fulfilled:', action.payload);
+      state.loading = false;
+      state.data = action.payload;
+    })
+    .addCase(fetchStats.rejected, (state, action) => {
+      console.log('fetchStats rejected:', action.payload);
+      state.loading = false;
+      state.error = action.payload || 'Failed to fetch stats';
+    });
+    
   },
 });
 

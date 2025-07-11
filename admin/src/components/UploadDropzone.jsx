@@ -1,71 +1,68 @@
 import { useDropzone } from 'react-dropzone';
 import { useCallback, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addImages } from '../redux/gallerySlice';
-import axios from 'axios';
+import { uploadImages } from '../redux/gallerySlice';
 
 export default function UploadDropzone() {
   const dispatch = useDispatch();
   const [album, setAlbum] = useState('');
-  const [file, setFile] = useState(null); // Single file
-  const [preview, setPreview] = useState(null);
-  const API_URL = import.meta.env.VITE_API_URL;
+  const [files, setFiles] = useState([]); // Multiple files
+  const [previews, setPreviews] = useState([]); // Image preview objects
 
+  // Create and cleanup preview URLs
   useEffect(() => {
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setPreview({ url: objectUrl, name: file.name });
-
-      return () => URL.revokeObjectURL(objectUrl);
+    if (!files.length) {
+      setPreviews([]);
+      return;
     }
-  }, [file]);
+
+    const urls = files.map((file) => ({
+      url: URL.createObjectURL(file),
+      name: file.name,
+    }));
+
+    setPreviews(urls);
+
+    return () => {
+      urls.forEach((p) => URL.revokeObjectURL(p.url));
+    };
+  }, [files]);
 
   const onDrop = useCallback(
     async (acceptedFiles) => {
-      const selectedFile = acceptedFiles[0];
-
       if (!album) {
         alert('Please select an album before uploading.');
         return;
       }
 
-      if (!selectedFile) {
-        alert('No file selected');
+      if (acceptedFiles.length === 0) {
+        alert('No photos selected');
         return;
       }
 
-      setFile(selectedFile);
-
-      const formData = new FormData();
-      formData.append('files', selectedFile); // ✅ single file field name
-      formData.append('album', album); // ✅ album name
+      setFiles(acceptedFiles); // Save selected files for preview
 
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.post(`${API_URL}/api/images/upload`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            // 'Content-Type': 'multipart/form-data', // let browser set it
-          },
-        });
-
-        dispatch(addImages(res.data.images));
+        await dispatch(uploadImages({ images: acceptedFiles, album })).unwrap();
         alert('Upload successful ✅');
+        setFiles([]); // Clear preview after success
       } catch (error) {
         console.error('Upload failed:', error);
         alert('Upload failed ❌');
       }
     },
-    [album, dispatch, API_URL]
+    [album, dispatch]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxFiles: 1, // ✅ only one file allowed
+    multiple: true,
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
   });
 
   return (
     <>
+      {/* Drop Zone */}
       <div
         {...getRootProps()}
         className={`border-4 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300 ease-in-out ${
@@ -92,7 +89,7 @@ export default function UploadDropzone() {
             />
           </svg>
           <p className="text-lg font-semibold">
-            {isDragActive ? 'Drop the file here ✨' : 'Drag & drop image or click to upload'}
+            {isDragActive ? 'Drop the files here ✨' : 'Drag & drop images or click to upload'}
           </p>
           <p className="text-sm text-gray-400">PNG, JPG, max 10MB</p>
         </div>
@@ -118,14 +115,16 @@ export default function UploadDropzone() {
       </select>
 
       {/* Preview */}
-      {preview && (
-        <div className="mt-4 text-center">
-          <p className="text-sm font-medium text-gray-500 mb-2">Preview:</p>
-          <img
-            src={preview.url}
-            alt={preview.name}
-            className="w-40 h-40 object-cover rounded mx-auto"
-          />
+      {previews.length > 0 && (
+        <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {previews.map((file, idx) => (
+            <img
+              key={idx}
+              src={file.url}
+              alt={file.name}
+              className="w-32 h-32 object-cover rounded shadow"
+            />
+          ))}
         </div>
       )}
     </>

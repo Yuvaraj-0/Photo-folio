@@ -5,16 +5,16 @@ import upload from '../middleware/multer.js'; // multer config for file uploads
 import cloudinary from '../config/cloudinary.js'; // your configured cloudinary instance
 import Image from '../models/Image.js';
 import { uploadImage } from '../controllers/imageController.js';
-import { deleteImage } from '../controllers/imageController.js';
+
 import { getImages } from '../controllers/cloudinaryController.js';
-import { updateImage } from '../controllers/cloudinaryController.js';
+import { updateImage, getSignedUrl } from '../controllers/cloudinaryController.js';
 
 
 const router = express.Router();
 
 router.post(
   '/upload',
-  upload.single('files'), 
+  upload.array('images'), 
   (req, res, next) => {
     console.log('📦 Multer processed file:', req.file);
     console.log('📩 Body:', req.body);
@@ -28,5 +28,5 @@ router.post(
 
 router.get('/', getImages);
 router.put('/:id', authenticateJWT, isAdmin, updateImage);
-
+router.post('/api/cloudinary/signed-url', getSignedUrl);
   export default router;

@@ -14,6 +14,9 @@ import authRoutes from './routes/authRoutes.js';
 import cloudinaryRoutes from './routes/cloudinaryImages.js';
 import inquiriesRoutes from './routes/inquiries.js';
 import contentRoutes from './routes/contentRoutes.js';
+import imageByAlbum from  './routes/imageRoutes.js'
+import imageRoutes from './routes/imageRoutes.js'
+
 
 
 dotenv.config(); // Load environment variables from .env
@@ -43,6 +46,10 @@ app.use('/api/images', cloudinaryRoutes);
 app.use('/api/inquiries', inquiriesRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/albums', albumRoutes);
+app.use('/api/album',imageByAlbum)
+app.use('/api/album', imageRoutes);
+app.use('/api', imageRoutes);
+app.use('/', cloudinaryRoutes);
 // app.use('/api/auth', express.json());
 // Root route (optional)
 app.get('/', (req, res) => {
