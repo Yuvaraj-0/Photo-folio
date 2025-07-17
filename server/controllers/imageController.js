@@ -147,3 +147,21 @@ export const deleteImage = async (req, res) => {
 };
 
 
+// imageController.js
+
+export const getImageById = async (req, res) => {
+  try {
+    const imageId = req.params.id;
+    const image = await Image.findById(imageId);
+
+    if (!image) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+
+    res.json(image); // returns full image object: url, public_id, etc.
+  } catch (err) {
+    console.error('Error fetching image:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+

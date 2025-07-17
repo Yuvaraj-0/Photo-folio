@@ -1,6 +1,31 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+
+
+// backend/controllers/authController.js
+import ClientAlbum from '../models/ClientAlbum.js'; // Your ClientAlbum model
+
+export const checkPhoneExists = async (req, res) => {
+  try {
+    const { phone } = req.query;
+    if (!phone) {
+      return res.status(400).json({ message: 'Phone is required' });
+    }
+
+    // Check if a ClientAlbum with this mobile number exists
+    const album = await ClientAlbum.findOne({ mobile: phone });
+    if (!album) {
+      return res.status(404).json({ exists: false, message: 'Phone not registered' });
+    }
+
+    res.json({ exists: true });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 // POST /api/auth/login
 export const login = async (req, res) => {
   const { email, password } = req.body;

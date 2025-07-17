@@ -8,6 +8,9 @@ export default {
     extend: {
       poppins: ['Poppins', 'sans-serif'], // for headings
         lora: ['Lora', 'serif'], 
+        fontFamily: {
+          playfair: ['"Playfair Display"', 'serif'],
+        },
     },
   },
   plugins: [],

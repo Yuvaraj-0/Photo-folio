@@ -1,48 +1,70 @@
-import { useState } from 'react';
+// src/pages/LoginPage.jsx
+import React, { useState ,useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/authSlice';
 import { useNavigate } from 'react-router-dom';
-
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated, user } = useSelector(state => state.auth);
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log({ email, password });
-    // send login API call here
+    dispatch(loginUser({ username, password }));
   };
 
-  return (
-    <div style={{ maxWidth: 400, margin: '100px auto' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: '100%', marginBottom: 10, padding: 8 }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          required
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: '100%', marginBottom: 10, padding: 8 }}
-        />
-        <button type="submit" style={{ width: '100%', padding: 10 }}>Login</button>
-      </form>
-      <p style={{ marginTop: 10 }}>
-        Don’t have an account?{' '}
-        <span
-          style={{ color: 'blue', cursor: 'pointer' }}
-          onClick={() => navigate('/register')}
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/client-home');  // replace '/clpage' with your route path
+    }
+  }, [isAuthenticated, navigate]);
+
+  return (<>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-4">Login</h2>
+
+      {error && <p className="text-red-500">{error}</p>}
+      {isAuthenticated && user && (
+        <p className="text-green-600">Welcome, {user.name || user.username}!</p>
+      )}
+
+      <form onSubmit={handleLogin} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium">Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            required
+            className="w-full px-3 py-2 border rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            className="w-full px-3 py-2 border rounded"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Create Account
-        </span>
-      </p>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
     </div>
+    </>
   );
-}
+};
+
+export default LoginPage;

@@ -19,6 +19,7 @@ export default function Sidebar() {
     { to: '/admin/dashboard', label: 'Dashboard', icon: HomeIcon },
     { to: '/uploads', label: 'Uploads', icon: ArrowUpTrayIcon },
     { to: '/edit-content', label: 'Edit Content', icon: PencilSquareIcon },
+   
   ];
 
   return (

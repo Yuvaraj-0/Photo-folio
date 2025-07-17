@@ -16,8 +16,18 @@ import inquiriesRoutes from './routes/inquiries.js';
 import contentRoutes from './routes/contentRoutes.js';
 import imageByAlbum from  './routes/imageRoutes.js'
 import imageRoutes from './routes/imageRoutes.js'
+import imageById from './routes/imageRoutes.js'
+import clientAlbumRoutes from './routes/clientAlbumRoutes.js';
+import uploadClientImages from './routes/ClientImage.js';
+import extendExpiry from './routes/ClientImage.js';
 
-
+import authRoute from './routes/clientAlbumRoutes.js';
+import clientImageRoutes from './routes/ClientImage.js';
+import SelImageRoutes from './routes/SelImage.js'
+import SelImageAprovalRoutes from './routes/SelImage.js'
+import getselecttedimg from './routes/SelImage.js'
+import SoftDelete from './routes/SelImage.js'
+import RestoreDelete from './routes/SelImage.js'
 
 dotenv.config(); // Load environment variables from .env
 
@@ -49,9 +59,35 @@ app.use('/api/albums', albumRoutes);
 app.use('/api/album',imageByAlbum)
 app.use('/api/album', imageRoutes);
 app.use('/api', imageRoutes);
+app.use('/api', imageById);
 app.use('/', cloudinaryRoutes);
-// app.use('/api/auth', express.json());
-// Root route (optional)
+// add client data
+app.use('/api', clientAlbumRoutes);
+// get client data
+app.use('/api', clientAlbumRoutes);
+//upload client photots
+app.use('/api',uploadClientImages)
+// admit set expiry phtots
+app.use('/api',extendExpiry)
+
+// ✅ Login route is now /api/login
+app.use('/api', authRoute); 
+// FETCH IMAGE BY USER :ID
+app.use('/api/client-images', clientImageRoutes)
+// CLIENT SELCTED IMAGE TO DB
+app.use('/api',SelImageRoutes)
+
+// GET SELECTED CLIENT-IMAGE
+app.use('/api',getselecttedimg)
+// ADMIN APROVE SELECTED IMG
+app.use('/api',SelImageAprovalRoutes)
+// SOFT REMOCE 
+app.use('/api',SoftDelete)
+// RESTORE SELECTD IMAGE
+app.use('/api',RestoreDelete )
+
+
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });

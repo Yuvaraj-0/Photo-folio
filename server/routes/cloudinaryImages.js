@@ -20,13 +20,14 @@ router.post(
     console.log('📩 Body:', req.body);
     next(); // must call next to reach controller
   },  
-  authenticateJWT,               // 1️⃣ Auth first ✅ sets req.user
-  isAdmin,                       // 2️⃣ Optional admin check ✅
+  authenticateJWT, 
+  isAdmin, 
+                       // 2️⃣ Optional admin check ✅authenticateJWT,               // 1️⃣ Auth first ✅ sets req.user
        // 3️⃣ Multer parses file ✅
   uploadImage                    // 4️⃣ Controller runs ✅
 );
 
-router.get('/', getImages);
-router.put('/:id', authenticateJWT, isAdmin, updateImage);
-router.post('/api/cloudinary/signed-url', getSignedUrl);
+// router.get('/', getImages);
+// router.put('/:id', authenticateJWT, isAdmin, updateImage);
+// router.post('/api/cloudinary/signed-url', getSignedUrl);
   export default router;

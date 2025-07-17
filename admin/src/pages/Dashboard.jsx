@@ -7,6 +7,11 @@ import { fetchStats } from '../redux/statsSlice';
 import OverviewBoard from '../components/OverviewBoard'
 import Navbar from '../components/Navbar';
 import AlbumGallery from '../components/AlbumGaller';
+import AddClient from './AddClient';
+import ClientManager from './ClientManager';
+import ClientStatus from './ClientStatus';
+import UploadImages from './UploadImages';
+import UploadClientBT from './UploadClientBT';
 export default function Dashboard() {
 
 
@@ -36,7 +41,15 @@ useEffect(() => {
       <OverviewBoard />
     </div>
     <AlbumGallery />
+    <div className="flex items-center gap-4 mb-6">
+  <ClientManager />
+  <UploadClientBT />
+</div>
+
+
+    <ClientStatus />
       </main>
     </AdminLayout>
+   
   );
 }
