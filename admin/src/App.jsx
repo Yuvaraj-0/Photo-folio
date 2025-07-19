@@ -6,6 +6,10 @@ import Sidebar from "./components/Sidebar";
 import LoginPage from "./pages/LoginPage";
 import InquiriesPage from "./Inqueries/Inquires";
 import UploadsPage from "./pages/UploadManager";
+import ClientDetails from "./pages/ClientDetails";
+import CUploadedImg  from "./pages/CUploadedImg"
+import CSelectedImg from "./pages/CSelectedImg";
+import Notify from "./pages/Notify";
 
 
 function App() {
@@ -21,7 +25,11 @@ function App() {
         <Route path="/uploads" element={<UploadsPage />} />
 <Route path="/edit-content" element={<ContentEditorPage />} />
 <Route path="/inquiries" element={<InquiriesPage />} />
-
+{/* <Route path="/client-details" element={<ClientDetails />} /> */}
+<Route path="/client-details/:albumId" element={<CUploadedImg />} />
+<Route path="/client-details/selected/:albumId" element={<CSelectedImg />} />
+<Route path="/client-overview/:albumId" element={<ClientDetails />} />
+<Route path="/inquiry" element={<Notify />} />
 {/* <Route
   path="/uploads"
   element={

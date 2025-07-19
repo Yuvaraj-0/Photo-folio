@@ -1,19 +1,15 @@
-// models/Inquiry.js
 import mongoose from 'mongoose';
 
+
+
 const inquirySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+  name: { type: String, required: true, trim: true },
   email: {
     type: String,
     trim: true,
     lowercase: true,
     validate: {
       validator: function (v) {
-        // Optional: allow only if phone is not provided
         return v || this.phone;
       },
       message: 'Email or phone is required',
@@ -24,21 +20,14 @@ const inquirySchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function (v) {
-        // Optional: allow only if email is not provided
         return v || this.email;
       },
       message: 'Phone or email is required',
     },
   },
-  message: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  message: { type: String, trim: true }, // Optional if not used
+  eventLocation: { type: String, trim: true },
+  eventDetails: { type: String, trim: true },
+  createdAt: { type: Date, default: Date.now },
 });
-
-export default mongoose.model('Inquiry', inquirySchema);
+export default mongoose.model('Inquiry', inquirySchema); 

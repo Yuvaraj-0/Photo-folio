@@ -1,4 +1,4 @@
-// Home.jsx
+
 import HeroSection from '../components/HeroSection';
 import Gallery from '../components/PhotoGallery/PhotoGallery';
 

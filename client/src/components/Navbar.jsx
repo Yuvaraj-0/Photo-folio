@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/authSlice';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isAuthenticated } = useSelector(state => state.auth);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -11,39 +19,61 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    dispatch(logout());
+    setMenuOpen(false);
+    navigate('/');
+  };
+
   return (
     <>
-      <nav style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '1rem 2rem',
-        backgroundColor: 'transparent',
-        position: 'fixed',
-        width: '100%',
-        top: 0,
-        left: 0,
-        zIndex: 100,
-        boxSizing: 'border-box',
-      }}>
+      <nav
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0.5rem 2rem', // Reduced vertical padding
+          backgroundColor: 'transparent',
+          position: 'fixed',
+          width: '100%',
+          top: 0,
+          left: 0,
+          zIndex: 100,
+          boxSizing: 'border-box',
+        }}
+      >
         {/* Logo */}
-        <div style={{ fontWeight: 'bold', fontSize: '1.5rem', cursor: 'pointer' }}>
-          Logo
+        <div style={{ lineHeight: 0, cursor: 'pointer' }}>
+          <Link to="/">
+            <img src={logo} alt="Company Logo" style={{ height: '60px', width: 'auto' }} />
+          </Link>
         </div>
 
         {/* Desktop Links */}
         {!isMobile && (
-          <div style={{ display: 'flex', gap: '1.5rem', fontWeight: 500 }}>
-            <Link to="/portfolio" style={{ textDecoration: 'none', color: 'inherit' }}>Portfolio</Link>
-            <Link to="/contact" style={{ textDecoration: 'none', color: 'inherit' }}>Contact</Link>
-            <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Login</Link>
+          <div style={{ display: 'flex', gap: '1.5rem', fontWeight: 500, alignItems: 'center' }}>
+            <Link to="/portfolio" style={{ textDecoration: 'none', color: 'inherit' }}>
+              Portfolio
+            </Link>
+            <Link to="/contact" style={{ textDecoration: 'none', color: 'inherit' }}>
+              Contact
+            </Link>
+
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#B9975B', fontWeight: '600' }}
+              >
+                Logout
+              </button>
+            )}
           </div>
         )}
 
-        {/* Mobile Right: Login + Menu */}
+        {/* Mobile Menu Toggle */}
         {isMobile && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Link to="/login" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 500 }}>Login</Link>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
@@ -51,6 +81,7 @@ export default function Navbar() {
                 border: 'none',
                 fontSize: '1.5rem',
                 cursor: 'pointer',
+                color: '#B9975B', // royal gold color
               }}
               aria-label="Toggle menu"
             >
@@ -62,21 +93,36 @@ export default function Navbar() {
 
       {/* Mobile Dropdown */}
       {menuOpen && isMobile && (
-        <div style={{
-          position: 'fixed',
-          top: '60px',
-          right: 0,
-          backgroundColor: 'white',
-          width: '160px',
-          padding: '1rem',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          zIndex: 99
-        }}>
-          <Link to="/portfolio" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: 'black' }}>Portfolio</Link>
-          <Link to="/contact" onClick={() => setMenuOpen(false)} style={{ textDecoration: 'none', color: 'black' }}>Contact</Link>
+        <div
+          style={{
+            position: 'fixed',
+            top: '60px', // Adjusted to navbar height
+            right: 0,
+            backgroundColor: 'white',
+            width: '160px',
+            padding: '1rem',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            zIndex: 99,
+          }}
+        >
+          <Link
+            to="/portfolio"
+            onClick={() => setMenuOpen(false)}
+            style={{ textDecoration: 'none', color: '#B9975B', fontWeight: '600' }}
+          >
+            Portfolio
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => setMenuOpen(false)}
+            style={{ textDecoration: 'none', color: '#B9975B', fontWeight: '600' }}
+          >
+            Contact
+          </Link>
+          {/* No logout button here */}
         </div>
       )}
     </>

@@ -15,11 +15,11 @@ export default function HeroSection() {
         <nav aria-label="Primary">
           <div className="flex gap-4 flex-wrap justify-center">
             <Link
-              to="/contact"
+              to="/login"
               className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-3 rounded-full shadow-lg hover:scale-105 hover:from-yellow-500 hover:to-pink-500 transition-all duration-300 font-semibold text-lg"
               aria-label="Book a photography session"
             >
-              Book Now
+              Private Album
             </Link>
             <Link
               to="/portfolio"

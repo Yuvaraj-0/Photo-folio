@@ -1,12 +1,14 @@
 import express from 'express';
 import {
   SelectingImage,
-  approveSelImage,
+  // approveSelImage,
+  approveSelectedImage,
+  approveAllSelectedImages,
   getSelectedByClient,
   // getClientImagesBySelection,
  
-  softRemoveSelectedImage,
-  restoreSelectedImage
+  // softRemoveSelectedImage,
+  // restoreSelectedImage
 } from '../controllers/SelImageControl.js';
 
 const router = express.Router();
@@ -15,13 +17,14 @@ const router = express.Router();
 router.post('/selectedImg/add', SelectingImage);
 
 // Admin approval of selected image
-router.post('/approve', approveSelImage);
+router.put('/selectedImg/approve/:selectedImageId', approveSelectedImage);
+router.put('/approve-all/:clientId', approveAllSelectedImages);
 
 // Get all selected images for a client
 router.get('/selectedImg/:clientId', getSelectedByClient);
 
 // Client show main image (by clientId)
 // router.get('/client-images/:clientAlbumId', getClientImagesBySelection);
-router.put('/soft-remove/:id', softRemoveSelectedImage);
-router.put('/restore/:id', restoreSelectedImage);
+// router.put('/soft-remove/:id', softRemoveSelectedImage);
+// router.put('/restore/:id', restoreSelectedImage);
 export default router;

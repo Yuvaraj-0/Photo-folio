@@ -13,6 +13,8 @@ import albumRoutes from './routes/albumRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import cloudinaryRoutes from './routes/cloudinaryImages.js';
 import inquiriesRoutes from './routes/inquiries.js';
+import getinquiriesRoutes from './routes/inquiries.js';
+
 import contentRoutes from './routes/contentRoutes.js';
 import imageByAlbum from  './routes/imageRoutes.js'
 import imageRoutes from './routes/imageRoutes.js'
@@ -25,8 +27,10 @@ import authRoute from './routes/clientAlbumRoutes.js';
 import clientImageRoutes from './routes/ClientImage.js';
 import SelImageRoutes from './routes/SelImage.js'
 import SelImageAprovalRoutes from './routes/SelImage.js'
+import SelImageAprovalAllRoutes from './routes/SelImage.js'
+
 import getselecttedimg from './routes/SelImage.js'
-import SoftDelete from './routes/SelImage.js'
+// import SoftDelete from './routes/SelImage.js'
 import RestoreDelete from './routes/SelImage.js'
 
 dotenv.config(); // Load environment variables from .env
@@ -53,7 +57,8 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/images', cloudinaryRoutes);
-app.use('/api/inquiries', inquiriesRoutes);
+app.use('/api', inquiriesRoutes);
+app.use('/api', getinquiriesRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/album',imageByAlbum)
@@ -81,8 +86,9 @@ app.use('/api',SelImageRoutes)
 app.use('/api',getselecttedimg)
 // ADMIN APROVE SELECTED IMG
 app.use('/api',SelImageAprovalRoutes)
+app.use('/api',SelImageAprovalAllRoutes)
 // SOFT REMOCE 
-app.use('/api',SoftDelete)
+// app.use('/api',SoftDelete)
 // RESTORE SELECTD IMAGE
 app.use('/api',RestoreDelete )
 

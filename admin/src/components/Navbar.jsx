@@ -10,6 +10,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../redux/gallerySlice';
+import { Link } from 'react-router-dom';
+
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -28,6 +30,8 @@ export default function Navbar() {
       <div className="text-xl font-bold text-blue-600 cursor-pointer" onClick={() => navigate('/')}>
         Dashboard
       </div>
+     
+      <Link to="/inquiry">Notification</Link>
 
       {/* Right: Upload + Menu */}
       <div className="flex items-center gap-4 relative">

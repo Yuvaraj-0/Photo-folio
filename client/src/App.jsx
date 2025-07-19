@@ -1,4 +1,6 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link} from 'react-router-dom';
+
+
  // adjust path
 
 import Home from './pages/Home';
@@ -13,6 +15,8 @@ import BirthParty from './pages/Birth-Party';
 import Wedding from './pages/Wedding';
 import ClPage from './pages/ClPage';
 import SelectedImg from './pages/SelectedImg';
+import WhatsAppButton from './components/WhatsAppButton';
+import Contact from './pages/Inquiry'
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from './redux/authSlice';
@@ -27,10 +31,16 @@ function App() {
       dispatch(setUser(JSON.parse(storedUser))); // 👈 load into Redux
     }
   }, [dispatch]);
+
+ 
+
+ 
   return (
     <>
       <Navbar />
+      <WhatsAppButton />
       <Routes>
+      
         <Route path="/" element={<Home />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/login" element={<LoginPage />} />
@@ -43,6 +53,7 @@ function App() {
         <Route path="/albums/wedding" element={<Wedding />} />  // ✅ Add this line
         <Route path="/client-home" element={<ClPage />} />
         <Route path="/client-home/selected-image" element={<SelectedImg />} />
+        <Route path="/contact" element={<Contact />} />
 
       </Routes>
     </>

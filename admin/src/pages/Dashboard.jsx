@@ -12,6 +12,7 @@ import ClientManager from './ClientManager';
 import ClientStatus from './ClientStatus';
 import UploadImages from './UploadImages';
 import UploadClientBT from './UploadClientBT';
+import Analytics from './Analytics';
 export default function Dashboard() {
 
 
@@ -48,6 +49,7 @@ useEffect(() => {
 
 
     <ClientStatus />
+    <Analytics />
       </main>
     </AdminLayout>
    
