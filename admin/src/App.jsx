@@ -39,17 +39,15 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         {/* Redirect to dashboard if root path */}
-        <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+       <Route
+    path="/"
+    element={
+      <Dashboard />
+    }
+  />
 
         {/* Admin protected routes */}
-        <Route
-        path="/admin/dashboard"
-        element={
-          
-            <Dashboard />
-          
-        }
-      />
+        
         {/* <Route path="/admin/dashboard" element={<Dashboard />} /> */}
         <Route path="/uploads" element={<UploadsPage />} />
         <Route path="/edit-content" element={<ContentEditorPage />} />
