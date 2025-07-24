@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+const API_URL = import.meta.env.VITE_API_URL;
 // Async thunks to fetch albums and photos by album
 export const fetchAlbums = createAsyncThunk('gallery/fetchAlbums', async () => {
-  const response = await axios.get('/api/albums');
+  const response = await axios.get('${API_URL}/api/albums');
   return response.data; // expect [{id, name}, ...]
 });
 
 export const fetchPhotosByAlbum = createAsyncThunk('gallery/fetchPhotosByAlbum', async (albumId) => {
-  const response = await axios.get(`/api/album/${albumId}/photos`);
+  const response = await axios.get(`${API_URL}/api/album/${albumId}/photos`);
   return response.data; // expect array of images
 });
 
@@ -23,7 +23,7 @@ export const deleteImage = createAsyncThunk(
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Authentication token not found');
 
-      await axios.delete('http://localhost:3002/api/images', {
+      await axios.delete('${API_URL}/api/images', {
         data: { public_id },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,7 +43,7 @@ export const deleteImage = createAsyncThunk(
 export const uploadImages = createAsyncThunk(
   'gallery/uploadImages',
   async ({ images, album }) => {
-    const API_URL = import.meta.env.VITE_API_URL;
+   
     const formData = new FormData();
 
     // images should be array of File objects; confirm this in your component
