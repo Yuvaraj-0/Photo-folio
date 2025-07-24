@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL;
 // Async thunks to fetch albums and photos by album
 export const fetchAlbums = createAsyncThunk('gallery/fetchAlbums', async () => {
-  const response = await axios.get('${API_URL}/api/albums');
+  const response = await axios.get(`${API_URL}/api/albums`);
   return response.data; // expect [{id, name}, ...]
 });
 
@@ -23,7 +23,7 @@ export const deleteImage = createAsyncThunk(
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Authentication token not found');
 
-      await axios.delete('${API_URL}/api/images', {
+      await axios.delete(`${API_URL}/api/images`, {
         data: { public_id },
         headers: {
           Authorization: `Bearer ${token}`,
