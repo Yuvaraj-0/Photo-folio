@@ -14,7 +14,7 @@ export const fetchStats = createAsyncThunk('stats/fetchStats', async (_, thunkAP
     if (error.response?.status === 401) {
       // Clear user data from localStorage or Redux
       localStorage.removeItem("user"); // or dispatch logout action
-      window.location.href = "/login"; // Redirect to login page
+      navigate('/login'); // Redirect to login page
     }
     return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     
