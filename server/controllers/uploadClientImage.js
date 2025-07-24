@@ -1,7 +1,8 @@
 import cloudinary from '../config/cloudinary.js';
 import ClientImage from '../models/ClientImage.js'; 
 import ClientAlbum from '../models/ClientAlbum.js';
-
+import SelImage from '../models/SelImage.js';
+// import SelImage from '../models/SelImage'; 
 export const uploadClientImages = async (req, res) => {
   try {
     const {clientId } = req.params;
@@ -37,6 +38,40 @@ console.log('Received clientId:', clientId);
     res.status(500).json({ message: 'Upload failed', error: err.message });
   }
 };
+
+// delete client image 
+
+export const deleteClientImages = async (req, res) => {
+  try {
+    // Accept either single id or array of ids
+    let { imageIds } = req.body;  // Expect { imageIds: ["id1", "id2", ...] } or { imageIds: "id1" }
+    
+    if (!imageIds) {
+      return res.status(400).json({ message: "No image IDs provided" });
+    }
+
+    // Normalize imageIds to array
+    if (!Array.isArray(imageIds)) {
+      imageIds = [imageIds];
+    }
+
+    const deletionResults = await Promise.all(imageIds.map(async (id) => {
+      const image = await ClientImage.findById(id);
+      if (!image) return { id, status: "not found" };
+
+      await cloudinary.uploader.destroy(image.public_id);
+      await ClientImage.findByIdAndDelete(id);
+
+      return { id, status: "deleted" };
+    }));
+
+    res.status(200).json({ message: "Deletion complete", results: deletionResults });
+  } catch (error) {
+    console.error("Error deleting images:", error);
+    res.status(500).json({ message: "Failed to delete images", error: error.message });
+  }
+};
+
 
 
 //Admin Expiry Set

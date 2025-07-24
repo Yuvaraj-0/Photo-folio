@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  overflow-x: hidden; /* Prevents side scroll */
+}
+
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

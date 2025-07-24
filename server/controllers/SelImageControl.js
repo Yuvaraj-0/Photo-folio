@@ -45,41 +45,11 @@ export const SelectingImage = async (req, res) => {
   }
 };
 
+// delete 
 
 
 
 
-
-
-//ADMIN APROVAL 
-
-
-// controllers/selectedImageController.js
-
-
-// export const approveSelImage = async (req, res) => {
-//   const { selImageId } = req.params;
-
-//   try {
-//     const updated = await SelImage.findByIdAndUpdate(
-//       selImageId,
-//       { approved: true },
-//       { new: true }
-//     );
-
-//     if (!updated) {
-//       return res.status(404).json({ message: 'Selected image not found' });
-//     }
-
-//     res.status(200).json(updated);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// In your backend routes/controller
-
-// PATCH /api/selectedImg/approve/:selectedImageId
 export const approveSelectedImage = async (req, res) => {
   const { selectedImageId } = req.params;
 
@@ -102,7 +72,7 @@ export const approveSelectedImage = async (req, res) => {
 // Controller function to approve all selected images by clientId
 export const approveAllSelectedImages = async (req, res) => {
   const { clientId } = req.params;
-  console.log("hittting -> controler ",clientId)
+
 
   try {
     const result = await SelImage.updateMany(
@@ -121,49 +91,136 @@ export const approveAllSelectedImages = async (req, res) => {
   }
 };
 
+//delete all selimages
+export const deleteSelImages = async (req, res) => {
+  try {
+    let { imageIds, clientId } = req.body;
+    console.log("Deleting only from MongoDB:", imageIds, clientId);
 
-  
-// ✅ Get selected images for a specific client
-// import SelImage from '../models/selImageModel.js'; // ✅ correct import
+    if (!imageIds) {
+      return res.status(400).json({ message: "No image IDs provided" });
+    }
+    if (!clientId) {
+      return res.status(400).json({ message: "Client ID is required" });
+    }
 
-// export const getSelectedByClient = async (req, res) => {
+    if (!Array.isArray(imageIds)) {
+      imageIds = [imageIds];
+    }
+
+    const deletionResults = await Promise.all(
+      imageIds.map(async (id) => {
+        const image = await SelImage.findOne({ _id: id, clientId: clientId });
+        if (!image) return { id, status: "not found or client mismatch" };
+
+        await SelImage.findByIdAndDelete(id); // Only delete from MongoDB
+
+        return { id, status: "deleted from MongoDB" };
+      })
+    );
+
+    res.status(200).json({ message: "MongoDB deletion complete", results: deletionResults });
+  } catch (error) {
+    console.error("Error deleting from MongoDB:", error);
+    res.status(500).json({ message: "Failed to delete from MongoDB", error: error.message });
+  }
+};
+
+
+// export const deleteSelImages = async (req, res) => {
 //   try {
-//     const { albumId } = req.params;
+//     let { imageIds, clientId } = req.body;
+//     console.log("hittting -> controler ->vDELETINGG..... ",imageIds,clientId)
 
-//     const images = await SelImage.find({
-//       albumId,
-//       isDeleted: false, // ✅ only if you're using this field
-//     }).populate('imageId'); // ✅ if imageId is referenced from another model
-
-//     if (!images.length) {
-//       return res.status(404).json({ message: 'No selected images found.' });
+//     if (!imageIds) {
+//       return res.status(400).json({ message: "No image IDs provided" });
+//     }
+//     if (!clientId) {
+//       return res.status(400).json({ message: "Client ID is required" });
 //     }
 
-//     res.status(200).json(images);
+//     if (!Array.isArray(imageIds)) {
+//       imageIds = [imageIds];
+//     }
+
+//     const deletionResults = await Promise.all(
+//       imageIds.map(async (id) => {
+//         // Find image by ID AND clientId
+//         const image = await SelImage.findOne({ _id: id, clientId: clientId });
+//         if (!image) return { id, status: "not found or client mismatch" };
+
+//         await cloudinary.uploader.destroy(image.public_id);
+//         await SelImage.findByIdAndDelete(id);
+
+//         return { id, status: "deleted" };
+//       })
+//     );
+
+//     res.status(200).json({ message: "Deletion complete", results: deletionResults });
 //   } catch (error) {
-//     console.error('❌ Error in getSelectedImagesByAlbumId:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
+//     console.error("Error deleting SelImages:", error);
+//     res.status(500).json({ message: "Failed to delete images", error: error.message });
 //   }
 // };
 
-// export const getSelectedByClient = async (req, res) => {
-//   const { clientId } = req.params;
 
-//   try {
-//     // Populate only deleted images
-//     const selected = await SelImage.find({ clientId })
-//       .populate({
-//         path: 'imageId',
-//         match: { isDeleted: true }  // ✅ Get only soft-deleted images
-//       });
 
-  
+// delete only aproved selimages
 
-//     res.status(200).json(deletedOnly);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+
+
+
+
+
+// GET unapproved SelImages for a client
+// GET unapproved SelImages for a client, including populated image info
+export const getUnapprovedSelImagesByClientId = async (req, res) => {
+  const { clientId } = req.params;
+console.log("hitting ==>>[==>",clientId)
+  try {
+    const images = await SelImage.find({
+      clientId: clientId,
+      approved: false,
+    }).populate('imageId');
+
+    // Optional debug logs
+    images.forEach((item, idx) => {
+      console.log(`❌ Unapproved Image #${idx + 1} ID:`, item.imageId?._id);
+      console.log(`❌ Unapproved Image #${idx + 1} URL:`, item.imageId?.url);
+    });
+
+    res.status(200).json(images);
+  } catch (error) {
+    console.error("❌ Error fetching unapproved SelImages:", error);
+    res.status(500).json({ message: "Failed to fetch unapproved images", error });
+  }
+};
+
+
+// GET approved SelImages for a client, including populated image info
+export const getapprovedSelImagesByClientId = async (req, res) => {
+  const { clientId } = req.params;
+console.log("hitting ==>>[==>",clientId)
+  try {
+    const images = await SelImage.find({
+      clientId: clientId,
+      approved: true,
+    }).populate('imageId');
+
+    // Optional debug logs
+    images.forEach((item, idx) => {
+      console.log(`❌ Unapproved Image #${idx + 1} ID:`, item.imageId?._id);
+      console.log(`❌ Unapproved Image #${idx + 1} URL:`, item.imageId?.url);
+    });
+
+    res.status(200).json(images);
+  } catch (error) {
+    console.error("❌ Error fetching unapproved SelImages:", error);
+    res.status(500).json({ message: "Failed to fetch unapproved images", error });
+  }
+};
+
+
 
 export const getSelectedByClient = async (req, res) => {
   const { clientId } = req.params;

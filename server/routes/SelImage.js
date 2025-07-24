@@ -5,10 +5,10 @@ import {
   approveSelectedImage,
   approveAllSelectedImages,
   getSelectedByClient,
-  // getClientImagesBySelection,
- 
-  // softRemoveSelectedImage,
-  // restoreSelectedImage
+  
+  deleteSelImages,
+  getUnapprovedSelImagesByClientId ,
+  getapprovedSelImagesByClientId 
 } from '../controllers/SelImageControl.js';
 
 const router = express.Router();
@@ -22,7 +22,10 @@ router.put('/approve-all/:clientId', approveAllSelectedImages);
 
 // Get all selected images for a client
 router.get('/selectedImg/:clientId', getSelectedByClient);
+router.delete('/delete/sel-images', deleteSelImages);
 
+router.get('/unapproved/:clientId', getUnapprovedSelImagesByClientId);
+router.get('/approved/:clientId', getapprovedSelImagesByClientId);
 // Client show main image (by clientId)
 // router.get('/client-images/:clientAlbumId', getClientImagesBySelection);
 // router.put('/soft-remove/:id', softRemoveSelectedImage);

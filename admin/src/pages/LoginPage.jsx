@@ -28,12 +28,18 @@ export default function AdminLogin() {
       localStorage.setItem('token', response.data.token);
 
       // Dispatch login success to Redux store with user data
-      dispatch(loginSuccess(response.data.user));
+      dispatch(loginSuccess({
+        ...response.data.user,
+        name: 'admin',
+        role: 'admin'
+      }));
+      
 
       alert('Admin logged in successfully!');
 
       // Redirect to admin dashboard (change route as needed)
       navigate('/admin/dashboard');
+     
 
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
@@ -70,6 +76,7 @@ export default function AdminLogin() {
         {loading ? 'Logging in...' : 'Login as Admin'}
       </button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
     </form>
   );
 }

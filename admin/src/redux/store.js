@@ -8,6 +8,7 @@ import imageUploadReducer from './imageUploadSlice';
 import clientImageReducer from './clientImage';
 import inquiryReducer from './inquirySlice';
 import authReducer from './authSlice';
+import imageReducer from './adminAproval';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -18,6 +19,7 @@ export const store = configureStore({
     imageUpload: imageUploadReducer,
     clientImages: clientImageReducer,
     inquiry: inquiryReducer,
+    images: imageReducer,
     
   },
 });

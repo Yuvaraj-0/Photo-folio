@@ -53,10 +53,10 @@ export default function Navbar() {
         {/* Desktop Links */}
         {!isMobile && (
           <div style={{ display: 'flex', gap: '1.5rem', fontWeight: 500, alignItems: 'center' }}>
-            <Link to="/portfolio" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/portfolio" style={{ textDecoration: 'none', color: '#5D3A00' }}>
               Portfolio
             </Link>
-            <Link to="/contact" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/contact" style={{ textDecoration: 'none', color: '#5D3A00' }}>
               Contact
             </Link>
 
@@ -73,58 +73,83 @@ export default function Navbar() {
 
         {/* Mobile Menu Toggle */}
         {isMobile && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center',gap: '1rem'  }}>
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                color: '#B9975B', // royal gold color
-              }}
-              aria-label="Toggle menu"
-            >
-              &#9776;
-            </button>
+  onClick={() => setMenuOpen(!menuOpen)}
+  style={{
+    background: 'none',
+    border: 'none',  
+    outline: 'none',      // ✅ This removes the border
+    fontSize: '1.5rem',
+    cursor: 'pointer',
+    color: '#B9975B',
+  }}
+  aria-label="Toggle menu"
+>
+  &#9776;
+</button>
+
           </div>
         )}
       </nav>
 
       {/* Mobile Dropdown */}
       {menuOpen && isMobile && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '60px', // Adjusted to navbar height
-            right: 0,
-            backgroundColor: 'white',
-            width: '160px',
-            padding: '1rem',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            zIndex: 99,
-          }}
-        >
-          <Link
-            to="/portfolio"
-            onClick={() => setMenuOpen(false)}
-            style={{ textDecoration: 'none', color: '#B9975B', fontWeight: '600' }}
-          >
-            Portfolio
-          </Link>
-          <Link
-            to="/contact"
-            onClick={() => setMenuOpen(false)}
-            style={{ textDecoration: 'none', color: '#B9975B', fontWeight: '600' }}
-          >
-            Contact
-          </Link>
-          {/* No logout button here */}
-        </div>
-      )}
+  <div
+    style={{
+      position: 'fixed',
+      top: '60px',
+      right: 0,
+      backgroundColor: 'white',
+      width: '160px',
+      padding: '1rem',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1rem',
+      zIndex: 99,
+    }}
+  >
+   <Link
+  to="/portfolio"
+  onClick={() => setMenuOpen(false)}
+  style={{ 
+    textDecoration: 'none', 
+    color: '#5D3A00', // royal brown
+    fontWeight: '600',
+    fontSize: '1.1rem',
+    fontFamily: 'Georgia, serif'
+  }}
+>
+  Portfolio
+</Link>
+<Link
+  to="/contact"
+  onClick={() => setMenuOpen(false)}
+  style={{ 
+    textDecoration: 'none', 
+    color: '#5D3A00', // royal brown
+    fontWeight: '600',
+    fontSize: '1.1rem',
+    fontFamily: 'Georgia, serif'
+  }}
+>
+  Contact
+</Link>
+
+
+    {/* ✅ Only show Logout if authenticated */}
+    {isAuthenticated && (
+      <button
+        onClick={handleLogout}
+        style={{ textDecoration: 'none', color: 'red', fontWeight: '600' }}
+      >
+        Logout
+      </button>
+    )}
+  </div>
+)}
+
     </>
   );
 }
