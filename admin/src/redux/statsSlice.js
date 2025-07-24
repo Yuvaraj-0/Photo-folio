@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
 export const fetchStats = createAsyncThunk('stats/fetchStats', async (_, thunkAPI) => {
   try {
     const token = localStorage.getItem('token');
