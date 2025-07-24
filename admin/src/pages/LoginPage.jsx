@@ -38,7 +38,7 @@ export default function AdminLogin() {
       alert('Admin logged in successfully!');
 
       // Redirect to admin dashboard (change route as needed)
-      navigate('/admin/dashboard');
+      navigate('/');
      
 
     } catch (err) {
