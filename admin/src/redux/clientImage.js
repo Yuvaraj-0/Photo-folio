@@ -54,7 +54,7 @@ export const approveSelectedImage = createAsyncThunk(
     async (clientId, thunkAPI) => {
       try {
         
-        const res = await axios.put(`/api/approve-all/${clientId}`);
+        const res = await axios.put(`${API_URL}/api/approve-all/${clientId}`);
         
         return res.data;
       } catch (error) {
