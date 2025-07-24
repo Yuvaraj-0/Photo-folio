@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3002', // your API base URL
+  baseURL: 'https://your-backend-url.onrender.com/api/stats', // your API base URL
 });
 
 // Add token to every request if present
