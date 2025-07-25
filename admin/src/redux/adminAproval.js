@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+const API_URL = import.meta.env.VITE_API_URL;
 export const fetchUnapprovedImages = createAsyncThunk(
   'images/fetchUnapprovedImages',  // keep this
   async (clientId) => {
-    const res = await axios.get(`/api/unapproved/${clientId}`);
+    const res = await axios.get(`${API_URL}/api/unapproved/${clientId}`);
     console.log("Unapproved data<<<===", res.data);
     return res.data;
   }
@@ -13,7 +13,7 @@ export const fetchUnapprovedImages = createAsyncThunk(
 export const fetchApprovedImages = createAsyncThunk( // renamed variable as well (capital A)
   'images/fetchApprovedImages',  // changed prefix here
   async (clientId) => {
-    const res = await axios.get(`/api/approved/${clientId}`);
+    const res = await axios.get(`${API_URL}/api/approved/${clientId}`);
     console.log("Approved data<<<===", res.data);
     return res.data;
   }
@@ -23,7 +23,7 @@ export const deleteSelImages = createAsyncThunk(
     'selImages/deleteSelImages',
     async ({ imageIds, clientId }, { rejectWithValue }) => {
       try {
-        const response = await axios.delete('/api/delete/sel-images', {
+        const response = await axios.delete(`${API_URL}/api/delete/sel-images`, {
           data: { imageIds, clientId },
         });
         return response.data.results;

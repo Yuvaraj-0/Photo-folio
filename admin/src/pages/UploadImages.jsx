@@ -102,13 +102,15 @@ export default function UploadImages() {
       </div>
 
       {/* Preview */}
+      
       {previewUrls.length > 0 && (
-        <div className="mb-4 grid grid-cols-3 gap-4">
-          {previewUrls.map((url, i) => (
-            <img key={i} src={url} alt={`preview-${i}`} className="w-full h-32 object-cover rounded" />
-          ))}
-        </div>
-      )}
+  <div className="mb-4 max-h-64 overflow-y-auto grid grid-cols-3 gap-4 border p-2 rounded">
+    {previewUrls.map((url, i) => (
+      <img key={i} src={url} alt={`preview-${i}`} className="w-full h-32 object-cover rounded" />
+    ))}
+  </div>
+)}
+
 
       {/* Upload button */}
       <button
